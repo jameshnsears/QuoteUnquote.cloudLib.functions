@@ -1,0 +1,6 @@
+config/*.json
+.coverage
+coverage.xml
+local.properties
+*/**/*.pyc
+*/**/misc.xml
