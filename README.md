@@ -1,11 +1,13 @@
 # GCP Functions & (optional) Cloud Run
 
+[![codecov](https://codecov.io/gh/jameshnsears/QuoteUnquote.cloudLib.functions/branch/main/graph/badge.svg?token=jc55AxH2ry)](https://codecov.io/gh/jameshnsears/QuoteUnquote.cloudLib.functions) [![deploy-gcp](https://github.com/jameshnsears/QuoteUnquote.cloudLib.functions/actions/workflows/deploy-gcp.yml/badge.svg)](https://github.com/jameshnsears/QuoteUnquote.cloudLib.functions/actions/workflows/deploy-gcp.yml)
+
 NOTE: overlap between:
 
 * <https://console.cloud.google.com/home/dashboard>
 * <https://console.firebase.google.com>
 
-## 1. Install GCP cli locally - Debian/Ubuntu
+## 1. Install GCP cli locally - Debian
 
 ```bash
 echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] \
@@ -38,6 +40,7 @@ gcloud init
   * Native mode instance
   * eur3 (multi region)
   * favourites_collection
+  * transfer_collection
 
 ### 2.2. Create Service Account
 
@@ -71,27 +74,42 @@ gcloud services enable logging.googleapis.com
 
 ## 5. Test
 
+Ensure venv created (as per GitHub workflows):
+
+```text
+/usr/bin/python3.9 -m venv --system-site-packages venv
+source venv/bin/activate
+pip install -r requirements-test.txt
+pip install -r src/requirements.txt
+```
+
 ### 5.1. pycharm
 
 * run 'pytest gcp dev'
 
-### 5.2. curl - localhost HTTP using remote Firestore in GCP
+### 5.2. curl - localhost HTTP into remote Firestore in GCP
 
-* integration test, of remote functions HTTP, in GitHub workflow
+* NOTE: integration test, of remote functions HTTP, in GitHub workflow
+
+run 'index gcp dev'
 
 ```text
 export GOOGLE_APPLICATION_CREDENTIALS=config/dev-service-account.json
 
 curl -X POST \
-  http://127.0.0.1:5000/save \
+  http://127.0.0.1:8080/save \
   -H "Content-Type:application/json" \
-  -d '{"code": "qski!$£90d", "digests": ["1", "2"]}'
-  
+  -d '{"code": "500000008b", "digests": ["01234567", "12345678"]}'
   
 curl -X POST \
-  http://127.0.0.1:5000/receive \
+  http://127.0.0.1:8080/receive \
   -H "Content-Type:application/json" \
-  -d '{"code": "qski!$£90d"}'
+  -d '{"code": "500000008b"}'
+  
+curl -X POST \
+  http://127.0.0.1:8080/transfer_backup \
+  -H "Content-Type:application/json" \
+  --data-binary "@test_data/transfer_backup_request.json"
 ```
 
 ---
@@ -102,6 +120,8 @@ curl -X POST \
   * <https://docs.microsoft.com/en-us/azure/app-service/tutorial-custom-container?pivots=container-linux>
   * <https://docs.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=bash&pivots=python-framework-flask>
   * <https://azure.microsoft.com/en-gb/services/app-service/>
+
+* Also uses, close to chargable, hard disk space in GCP
 
 ### 6.1. Build image
 
@@ -124,7 +144,7 @@ docker run --rm -p 9090:8080 -e PORT=8080 -e \
 curl -X POST \
   http://127.0.0.1:9090/receive \
   -H "Content-Type:application/json" \
-  -d '{"code": "012345672e"}'
+  -d '{"code": "500000008b"}'
 
 docker stop <id>
 docker rm <id>
@@ -153,6 +173,12 @@ gcloud run deploy quoteunquote --image gcr.io/${GCP_PROJECT_ID_DEVELOPMENT}/quot
 curl -X POST \
   https://quoteunquote-<hashed id>-uc.a.run.app/receive \
   -H "Content-Type:application/json" \
-  -d '{"code": "012345672e"}'
+  -d '{"code": "500000008b"}'
 
 ```
+
+## 7. Deployment: Cloud Functions in GCP 
+
+* visit GCP instance in config/dev-service-account.json
+  * <https://console.cloud.google.com/home/dashboard>
+* see: deploy-gcp.yml

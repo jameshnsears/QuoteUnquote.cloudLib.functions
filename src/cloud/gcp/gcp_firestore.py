@@ -3,33 +3,53 @@ from datetime import datetime
 from flask import jsonify
 from google.cloud import firestore
 
-from storage.unable_to_save_exception import UnableToSaveException
 from utils import logging_facade
 
 
-def save(code, digests):
-    logging_facade.info("save: " + "; ".join(digests))
-
-    try:
-        _get_collection().document(code).set({'now': _get_utc_seconds(), 'digests': digests})
-    except Exception as e:
-        logging_facade.info(e)
-        raise UnableToSaveException()
+def favourites_send(code, digests):
+    logging_facade.info("favourites_send: " + "; ".join(digests))
+    _get_collection_favourites().document(code).set(
+        {'now': _get_utc_seconds(), 'digests': digests})
 
 
-def retrieve(code):
-    logging_facade.info("retrieve: " + code)
-
-    document = _get_collection().document(code).get()
+def favourites_retrieve(code):
+    logging_facade.info("favourites_retrieve: " + code)
+    document = _get_collection_favourites().document(code).get()
     if document.exists:
         return jsonify({'digests': document.to_dict()['digests']})
-
     return None
 
 
-def _get_collection():
+def transfer_backup(code, json):
+    logging_facade.info("transfer_backup: " + "; ".join(json))
+
+    json['now'] = _get_utc_seconds()
+
+    _get_collection_transfer().document(code).set(json)
+
+
+def transfer_restore(code):
+    logging_facade.info("transfer_restore: " + code)
+    document = _get_collection_transfer().document(code).get()
+    if document.exists:
+        return jsonify(
+            {
+                'transfer': document.to_dict(),
+                'error': "",
+                'reason': ""
+            }
+        )
+    return None
+
+
+def _get_collection_favourites():
     db = firestore.Client()
     return db.collection('favourites_collection')
+
+
+def _get_collection_transfer():
+    db = firestore.Client()
+    return db.collection('transfer_collection')
 
 
 def _get_utc_seconds():

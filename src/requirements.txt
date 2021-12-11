@@ -2,3 +2,4 @@ Flask
 google-cloud-firestore
 google-cloud-logging
 gunicorn
+jsonschema

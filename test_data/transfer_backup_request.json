@@ -1,0 +1,115 @@
+{
+    "code": "40000000d4",
+    "settings": [
+        {
+        "quotations": {
+            "CONTENT_ADD_TO_PREVIOUS_ALL": true,
+            "CONTENT_ALL": true,
+            "CONTENT_AUTHOR": false,
+            "CONTENT_AUTHOR_NAME": "",
+            "CONTENT_FAVOURITES": false,
+            "CONTENT_SEARCH": false,
+            "CONTENT_SEARCH_COUNT": 0,
+            "CONTENT_SEARCH_TEXT": ""
+        },
+        "appearance": {
+            "APPEARANCE_TRANSPARENCY": 0,
+            "APPEARANCE_COLOUR": "",
+            "APPEARANCE_TEXT_FAMILY": "",
+            "APPEARANCE_TEXT_STYLE": "",
+            "APPEARANCE_TEXT_SIZE": 0,
+            "APPEARANCE_TEXT_COLOUR": "",
+            "APPEARANCE_TOOLBAR_COLOUR": "",
+            "APPEARANCE_TOOLBAR_FIRST": false,
+            "APPEARANCE_TOOLBAR_PREVIOUS": true,
+            "APPEARANCE_TOOLBAR_FAVOURITE": true,
+            "APPEARANCE_TOOLBAR_SHARE": true,
+            "APPEARANCE_TOOLBAR_RANDOM": true,
+            "APPEARANCE_TOOLBAR_SEQUENTIAL": false
+        },
+        "schedule": {
+                "EVENT_NEXT_RANDOM": false,
+                "EVENT_NEXT_SEQUENTIAL": true,
+                "EVENT_DISPLAY_WIDGET": false,
+                "EVENT_DISPLAY_WIDGET_AND_NOTIFICATION": true,
+                "EVENT_DAILY": false,
+                "EVENT_DEVICE_UNLOCK": false,
+                "EVENT_DAILY_MINUTE": 0,
+                "EVENT_DAILY_HOUR": 0
+            },
+        "widget_id": 12
+        },
+        {
+        "quotations": {
+            "CONTENT_ADD_TO_PREVIOUS_ALL": true,
+            "CONTENT_ALL": true,
+            "CONTENT_AUTHOR": false,
+            "CONTENT_AUTHOR_NAME": "",
+            "CONTENT_FAVOURITES": false,
+            "CONTENT_SEARCH": false,
+            "CONTENT_SEARCH_COUNT": 0,
+            "CONTENT_SEARCH_TEXT": ""
+        },
+        "appearance": {
+            "APPEARANCE_TRANSPARENCY": 0,
+            "APPEARANCE_COLOUR": "",
+            "APPEARANCE_TEXT_FAMILY": "",
+            "APPEARANCE_TEXT_STYLE": "",
+            "APPEARANCE_TEXT_SIZE": 0,
+            "APPEARANCE_TEXT_COLOUR": "",
+            "APPEARANCE_TOOLBAR_COLOUR": "",
+            "APPEARANCE_TOOLBAR_FIRST": false,
+            "APPEARANCE_TOOLBAR_PREVIOUS": true,
+            "APPEARANCE_TOOLBAR_FAVOURITE": true,
+            "APPEARANCE_TOOLBAR_SHARE": true,
+            "APPEARANCE_TOOLBAR_RANDOM": true,
+            "APPEARANCE_TOOLBAR_SEQUENTIAL": false
+        },
+        "schedule": {
+                "EVENT_NEXT_RANDOM": false,
+                "EVENT_NEXT_SEQUENTIAL": true,
+                "EVENT_DISPLAY_WIDGET": false,
+                "EVENT_DISPLAY_WIDGET_AND_NOTIFICATION": true,
+                "EVENT_DAILY": false,
+                "EVENT_DEVICE_UNLOCK": false,
+                "EVENT_DAILY_MINUTE": 0,
+                "EVENT_DAILY_HOUR": 0
+            },
+        "widget_id": 13
+        }
+    ],
+    "current": [
+        {
+            "digest": "bb4685f4",
+            "widget_id": 12
+        },
+        {
+            "digest": "1a2dbc82",
+            "widget_id": 13
+        }
+    ],
+    "previous": [
+        {
+            "content_type": 1,
+            "digest": "7a36e553",
+            "navigation": 1,
+            "widget_id": 12
+        },
+        {
+            "content_type": 1,
+            "digest": "7a36e553",
+            "navigation": 2,
+            "widget_id": 13
+        }
+    ],
+    "favourite": [
+        {
+            "digest": "bb4685f4",
+            "navigation": 1
+        },
+        {
+            "digest": "1a2dbc82",
+            "navigation": 2
+        }
+    ]
+}

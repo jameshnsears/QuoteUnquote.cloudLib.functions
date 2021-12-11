@@ -4,3 +4,5 @@ coverage.xml
 local.properties
 */**/*.pyc
 */**/misc.xml
+/venv/
+/system_test_dev.sh

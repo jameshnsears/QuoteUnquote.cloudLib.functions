@@ -1,66 +1,66 @@
 import hashlib
 
 from flask import jsonify
-
-ERROR_JSON_NOT_VALID = 'JSON not valid'
-ERROR_UNABLE_TO_SAVE = 'unable to save'
-
-REASON_CRC_FAIL = 'crc fail'
-REASON_EMPTY_JSON = 'empty json'
-REASON_LENGTH_CODE = 'code length'
-REASON_LENGTH_DIGESTS = 'digests length'
-REASON_NO_CODE = 'no code'
-REASON_NO_DIGESTS_FOR_CODE = 'no digests for code'
-REASON_NO_DIGESTS = 'no digests'
-REASON_NO_JSON = 'no json'
+from jsonschema import validate, ValidationError
 
 
-def check_save(request):
-    invalid_code_response = _check_code(request)
-    if invalid_code_response is not None:
-        return invalid_code_response
+class RequestValidation:
+    _JSONSCHEMA_REQUEST_RETRIEVE = {
+        "type": "object",
+        "properties": {
+            "code": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 10
+            },
+        },
+        "required": ["code"]
+    }
 
-    if request.json.get('digests', None) is None:
-        return error_with_request(REASON_NO_DIGESTS)
+    RESPONSE_ERROR_JSON_NOT_VALID = 'JSON not valid'
+    RESPONSE_ERROR_UNABLE_TO_COMPLETE_SEND = 'unable to complete send'
+    RESPONSE_REASON_CRC_FAIL = 'CRC fail'
+    RESPONSE_REASON_EMPTY_JSON = 'empty JSON'
+    RESPONSE_REASON_LENGTH_CODE = "'' is too short"
+    RESPONSE_REASON_NO_CODE = 'no code'
+    RESPONSE_REASON_NO_JSON = 'no JSON'
+    RESPONSE_REASON_NO_JSON_FOR_CODE = 'no JSON for code'
 
-    if len(request.json.get('digests')) == 0:
-        return error_with_request(REASON_LENGTH_DIGESTS)
+    def _check_code(self, request):
+        if not request.is_json:
+            return self.report_error_with_request(self.RESPONSE_REASON_NO_JSON)
 
-    return None
+        if request.json == {}:
+            return self.report_error_with_request(self.RESPONSE_REASON_EMPTY_JSON)
 
+        if request.json.get('code', None) is None:
+            return self.report_error_with_request(self.RESPONSE_REASON_NO_CODE)
 
-def check_receive(request):
-    return _check_code(request)
+        if len(request.json.get('code')) != 10:
+            return self.report_error_with_request(self.RESPONSE_REASON_LENGTH_CODE)
 
+        if not self._crc_check(request.json.get('code')):
+            return self.report_error_with_request(self.RESPONSE_REASON_CRC_FAIL)
 
-def _check_code(request):
-    if not request.is_json:
-        return error_with_request(REASON_NO_JSON)
+        return None
 
-    if request.json == {}:
-        return error_with_request(REASON_EMPTY_JSON)
+    @staticmethod
+    def _crc_check(code):
+        if code[8:] != hashlib.md5(code[:8].encode('utf-8')).hexdigest()[:2]:
+            return False
+        return True
 
-    if request.json.get('code', None) is None:
-        return error_with_request(REASON_NO_CODE)
+    @staticmethod
+    def check_against_jsonschema(json, schema):
+        validate(instance=json, schema=schema)
 
-    if len(request.json.get('code')) != 10:
-        return error_with_request(REASON_LENGTH_CODE)
+    def check_request_receive(self, request):
+        try:
+            self.check_against_jsonschema(request.json, self._JSONSCHEMA_REQUEST_RETRIEVE)
+        except ValidationError as e:
+            return self.report_error_with_request(e.message)
 
-    if not _crc_check(request.json.get('code')):
-        return error_with_request(REASON_CRC_FAIL)
+        return self._check_code(request)
 
-    return None
-
-
-def error_with_request(reason):
-    return jsonify({'error': ERROR_JSON_NOT_VALID, 'reason': reason}), 400
-
-
-def error_in_saving():
-    return jsonify({'error': ERROR_UNABLE_TO_SAVE}), 400
-
-
-def _crc_check(code):
-    if code[8:] != hashlib.md5(code[:8].encode('utf-8')).hexdigest()[:2]:
-        return False
-    return True
+    def report_error_with_request(self, reason):
+        return jsonify({'error': self.RESPONSE_ERROR_JSON_NOT_VALID, 'reason': reason}), 400
