@@ -77,7 +77,7 @@ gcloud services enable logging.googleapis.com
 Ensure venv created (as per GitHub workflows):
 
 ```text
-/usr/bin/python3.9 -m venv --system-site-packages venv
+/usr/bin/python3.10 -m venv --system-site-packages venv
 source venv/bin/activate
 pip install -r requirements-test.txt
 pip install -r src/requirements.txt
@@ -110,6 +110,11 @@ curl -X POST \
   http://127.0.0.1:8080/transfer_backup \
   -H "Content-Type:application/json" \
   --data-binary "@test_data/transfer_backup_request.json"
+  
+curl -X POST \
+  http://127.0.0.1:8080/transfer_restore \
+  -H "Content-Type:application/json" \
+  -d '{"code": "500000008b"}'  
 ```
 
 ---
