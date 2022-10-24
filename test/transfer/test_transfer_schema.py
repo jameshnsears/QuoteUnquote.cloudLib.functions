@@ -105,7 +105,7 @@ def test_valid_transfer_schema_with_new_appearance_elements():
         "previous": [
             {
                 "content_type": 1,
-                "digest": "7a36e553",
+                "digest": "1624c314",
                 "navigation": 1,
                 "widget_id": 12
             },
@@ -223,7 +223,7 @@ def test_valid_transfer_schema():
         "previous": [
             {
                 "content_type": 1,
-                "digest": "7a36e553",
+                "digest": "1624c314",
                 "navigation": 1,
                 "widget_id": 12
             },
@@ -299,7 +299,7 @@ def test_invalid_transfer_schema():
         "previous": [
             {
                 "content_type": 1,
-                "digest": "7a36e553",
+                "digest": "1624c314",
                 "navigation": 1,
                 "widget_id": 12
             },

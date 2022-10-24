@@ -93,13 +93,13 @@ json_request = {
     "previous": [
         {
             "content_type": 1,
-            "digest": "7a36e553",
+            "digest": "1624c314",
             "navigation": 1,
             "widget_id": 12
         },
         {
             "content_type": 1,
-            "digest": "7a36e553",
+            "digest": "1624c314",
             "navigation": 2,
             "widget_id": 13
         },
