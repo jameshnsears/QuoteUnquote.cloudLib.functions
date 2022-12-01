@@ -18,6 +18,7 @@
             "APPEARANCE_TEXT_FAMILY": "",
             "APPEARANCE_TEXT_STYLE": "",
             "APPEARANCE_TEXT_FORCE_ITALIC_REGULAR": false,
+            "APPEARANCE_TEXT_CENTER": false,
             "APPEARANCE_TEXT_SIZE": 0,
             "APPEARANCE_TEXT_COLOUR": "",
             "APPEARANCE_TOOLBAR_COLOUR": "",
