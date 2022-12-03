@@ -6,3 +6,4 @@ local.properties
 */**/misc.xml
 /venv/
 /system_test_dev.sh
+/bin/tidy-up-github-actions.sh
