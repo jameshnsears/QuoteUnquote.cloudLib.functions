@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.9 ]
+        python-version: [ 3.12.3 ]
 
     steps:
       - name: Checkout Code
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.9 ]
+        python-version: [ 3.12.3 ]
 
     steps:
       - name: Checkout Code
@@ -101,16 +101,16 @@ jobs:
           gcloud config set functions/region us-central1
           gcloud config list
           gcloud functions delete save --quiet || true
-          gcloud functions deploy save --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy save --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe save
           gcloud functions delete receive --quiet || true
-          gcloud functions deploy receive --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy receive --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe receive          
           gcloud functions delete transfer_backup --quiet || true
-          gcloud functions deploy transfer_backup --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy transfer_backup --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe transfer_backup          
           gcloud functions delete transfer_restore --quiet || true
-          gcloud functions deploy transfer_restore --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy transfer_restore --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe transfer_restore
 
   dev-deployment-test:
@@ -123,31 +123,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: test dev /save
-        run: |
-          status_code=$(curl -X POST --write-out %{http_code} \
-            https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/save \
-            -H "Content-Type:application/json" \
-            -d '{"code": "30000000e8", "digests": ["01234567", "12345678", "23456789"]}')
-          if [[ "$status_code" -ne 200 ]] ; then
-            echo 1
-          else
-            exit 0
-          fi
-
-      - name: test dev /receive
-        run: |
-          sleep 10
-          digests=$(curl -X POST \
-            https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/receive \
-            -H "Content-Type:application/json" \
-            -d '{"code": "30000000e8"}')
-          if [[ "${digests}" == "{\"digests\":[\"01234567\",\"12345678\",\"23456789\"]}" ]]; then
-            echo 0
-          else
-            exit 1
-          fi
-
       - name: test dev /transfer_backup
         run: |
           status_code=$(curl -X POST --write-out %{http_code} \
@@ -158,6 +133,19 @@ jobs:
             echo 1
           else
             exit 0
+          fi
+
+      - name: test dev /transfer_restore
+        run: |
+          sleep 10
+          digests=$(curl -X POST \
+            https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/transfer_restore \
+            -H "Content-Type:application/json" \
+            -d '{"code": "40000000d4"}')
+          if [[ "${digests}" == "{\"digests\":[\"01234567\",\"12345678\",\"23456789\"]}" ]]; then
+            echo 0
+          else
+            exit 1
           fi
 
   prod-deployment:
@@ -185,20 +173,20 @@ jobs:
           gcloud config set functions/region us-central1
           gcloud config list
           gcloud functions delete save --quiet || true
-          gcloud functions deploy save --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy save --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe save
           gcloud functions delete receive --quiet || true
-          gcloud functions deploy receive --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy receive --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe receive          
           gcloud functions delete transfer_backup --quiet || true
-          gcloud functions deploy transfer_backup --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy transfer_backup --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe transfer_backup
           gcloud functions delete transfer_restore --quiet || true
-          gcloud functions deploy transfer_restore --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python39 --trigger-http --allow-unauthenticated
+          gcloud functions deploy transfer_restore --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
           gcloud functions describe transfer_restore
 
   prod-deloyment-test:
-    name: prod-deloyment-test
+    name: prod-deployment-test
     needs: [ prod-deployment ]
     runs-on: ubuntu-latest
     steps:
