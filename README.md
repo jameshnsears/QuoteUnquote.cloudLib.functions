@@ -37,19 +37,19 @@ gcloud init
 ### 2.1. Create Firestore instance
 
 * Create Firestore
-  * Native mode instance
-  * eur3 (multi region)
-  * favourites_collection
-  * transfer_collection
+    * Native mode instance
+    * eur3 (multi region)
+    * favourites_collection
+    * transfer_collection
 
 ### 2.2. Create Service Account
 
 * create Service Account with roles:
-  * Cloud Functions Admin
-  * Firebase Admin SDK Administrator Service Agent
-  * Service Account Token Creator
-  * Service Account User
-  * Logs Writer
+    * Cloud Functions Admin
+    * Firebase Admin SDK Administrator Service Agent
+    * Service Account Token Creator
+    * Service Account User
+    * Logs Writer
 * export JSON key of Service Account
 
 ## 3. In cli, for project, do one off tasks
@@ -122,9 +122,9 @@ curl -X POST \
 ## 6. (Optional) Cloud Run - using function src in docker container
 
 * NOTE: azure has a similar container offering:
-  * <https://docs.microsoft.com/en-us/azure/app-service/tutorial-custom-container?pivots=container-linux>
-  * <https://docs.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=bash&pivots=python-framework-flask>
-  * <https://azure.microsoft.com/en-gb/services/app-service/>
+    * <https://docs.microsoft.com/en-us/azure/app-service/tutorial-custom-container?pivots=container-linux>
+    * <https://docs.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=bash&pivots=python-framework-flask>
+    * <https://azure.microsoft.com/en-gb/services/app-service/>
 
 * Also uses, close to chargable, hard disk space in GCP
 
@@ -158,8 +158,8 @@ docker rm <id>
 ### 6.3. Deploy to Cloud Run
 
 * additional Service Account roles:
-  * Cloud Run Admin
-  * Cloud Run Service Agent
+    * Cloud Run Admin
+    * Cloud Run Service Agent
 
 ```text
 docker images
@@ -182,8 +182,8 @@ curl -X POST \
 
 ```
 
-## 7. Deployment: Cloud Functions in GCP 
+## 7. Deployment: Cloud Functions in GCP
 
 * visit GCP instance in config/dev-service-account.json
-  * <https://console.cloud.google.com/home/dashboard>
+    * <https://console.cloud.google.com/home/dashboard>
 * see: deploy-gcp.yml
