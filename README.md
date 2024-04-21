@@ -99,22 +99,22 @@ run 'index gcp dev'
 ```text
 export GOOGLE_APPLICATION_CREDENTIALS=config/dev-service-account.json
 
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/save \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b", "digests": ["01234567", "12345678"]}'
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/transfer_backup \
   -H "Content-Type:application/json" \
   --data-binary "@test_data/transfer_backup_request.json"
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/transfer_restore \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'  
@@ -149,7 +149,7 @@ docker run --rm -p 9090:8080 -e PORT=8080 -e \
     GOOGLE_APPLICATION_CREDENTIALS=dev-service-account.json \
     quoteunquote:latest
 
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:9090/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
@@ -178,7 +178,7 @@ gcloud run deploy quoteunquote --image gcr.io/${GCP_PROJECT_ID_DEVELOPMENT}/quot
 #### 6.3.1. Integration Test
 
 ```text
-curl -X POST \
+curl -v -X POST \
   https://quoteunquote-<hashed id>-uc.a.run.app/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
