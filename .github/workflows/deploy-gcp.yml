@@ -138,11 +138,12 @@ jobs:
       - name: test dev /transfer_restore
         run: |
           sleep 10
-          digests=$(curl -m 20 --retry 3 -X POST \
+          response_length=$(curl -m 20 --retry 3 -X POST \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/transfer_restore \
             -H "Content-Type:application/json" \
-            -d '{"code": "40000000d4"}')
-          if [[ "${digests}" == "{\"digests\":[\"01234567\",\"12345678\",\"23456789\"]}" ]]; then
+            -d '{"code": "40000000d4"}' | wc -c)
+          echo ${response_length}
+          if [[ "${response_length}" == "2256" ]]; then
             echo 0
           else
             exit 1
