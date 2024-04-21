@@ -125,7 +125,7 @@ jobs:
 
       - name: test dev /transfer_backup
         run: |
-          status_code=$(curl -X POST --write-out %{http_code} \
+          status_code=$(curl -m 20 --retry 3 -X POST --write-out %{http_code} \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/transfer_backup \
             -H "Content-Type:application/json" \
             --data-binary "@test_data/transfer_backup_request.json")
@@ -138,7 +138,7 @@ jobs:
       - name: test dev /transfer_restore
         run: |
           sleep 10
-          digests=$(curl -X POST \
+          digests=$(curl -m 20 --retry 3 -X POST \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_DEVELOPMENT }}.cloudfunctions.net/transfer_restore \
             -H "Content-Type:application/json" \
             -d '{"code": "40000000d4"}')
@@ -197,7 +197,7 @@ jobs:
 
       - name: test prod /save
         run: |
-          status_code=$(curl -X POST --write-out %{http_code} \
+          status_code=$(curl -m 20 --retry 3 -X POST --write-out %{http_code} \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_PRODUCTION }}.cloudfunctions.net/save \
             -H "Content-Type:application/json" \
             -d '{"code": "30000000e8", "digests": ["0123456a", "1234567b", "2345678c"]}')
@@ -210,7 +210,7 @@ jobs:
       - name: test prod /receive
         run: |
           sleep 10
-          digests=$(curl -X POST \
+          digests=$(curl -m 20 --retry 3 -X POST \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_PRODUCTION }}.cloudfunctions.net/receive \
             -H "Content-Type:application/json" \
             -d '{"code": "30000000e8"}')
@@ -222,7 +222,7 @@ jobs:
 
       - name: test prod /transfer_backup
         run: |
-          status_code=$(curl -X POST --write-out %{http_code} \
+          status_code=$(curl -m 20 --retry 3 -X POST --write-out %{http_code} \
             https://us-central1-${{ secrets.GCP_PROJECT_ID_PRODUCTION }}.cloudfunctions.net/transfer_backup \
             -H "Content-Type:application/json" \
             --data-binary "@test_data/transfer_backup_request.json")
