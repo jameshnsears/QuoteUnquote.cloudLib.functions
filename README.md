@@ -25,6 +25,8 @@ gcloud init
 
 # login via Web UI & create env - https://console.cloud.google.com/home/dashboard
 
+# see config/*.gpg for env's
+
 # use us_central1 - as it's part of free usage
 ```
 
@@ -77,7 +79,7 @@ gcloud services enable logging.googleapis.com
 Ensure venv created (as per GitHub workflows):
 
 ```text
-/usr/bin/python3.10 -m venv --system-site-packages venv
+/usr/bin/python3.11.2 -m venv --system-site-packages venv
 source venv/bin/activate
 pip install -r requirements-test.txt
 pip install -r src/requirements.txt
@@ -85,6 +87,7 @@ pip install -r src/requirements.txt
 
 ### 5.1. pycharm
 
+* extract config/*.gpg files
 * run 'pytest gcp dev'
 
 ### 5.2. curl - localhost HTTP into remote Firestore in GCP
@@ -96,22 +99,22 @@ run 'index gcp dev'
 ```text
 export GOOGLE_APPLICATION_CREDENTIALS=config/dev-service-account.json
 
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/save \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b", "digests": ["01234567", "12345678"]}'
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/transfer_backup \
   -H "Content-Type:application/json" \
   --data-binary "@test_data/transfer_backup_request.json"
   
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:8080/transfer_restore \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'  
@@ -128,7 +131,7 @@ curl -X POST \
 
 * Also uses, close to chargable, hard disk space in GCP
 
-### 6.1. Build image
+### 6.1. Build docker image (optional)
 
 ```text
 docker images
@@ -146,7 +149,7 @@ docker run --rm -p 9090:8080 -e PORT=8080 -e \
     GOOGLE_APPLICATION_CREDENTIALS=dev-service-account.json \
     quoteunquote:latest
 
-curl -X POST \
+curl -v -X POST \
   http://127.0.0.1:9090/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
@@ -175,7 +178,7 @@ gcloud run deploy quoteunquote --image gcr.io/${GCP_PROJECT_ID_DEVELOPMENT}/quot
 #### 6.3.1. Integration Test
 
 ```text
-curl -X POST \
+curl -v -X POST \
   https://quoteunquote-<hashed id>-uc.a.run.app/receive \
   -H "Content-Type:application/json" \
   -d '{"code": "500000008b"}'
@@ -187,3 +190,10 @@ curl -X POST \
 * visit GCP instance in config/dev-service-account.json
     * <https://console.cloud.google.com/home/dashboard>
 * see: deploy-gcp.yml
+
+```text
+cd src
+cp ../config/dev-service-account.json .
+gcloud functions delete save --quiet || true
+gcloud functions deploy save --set-env-vars GOOGLE_APPLICATION_CREDENTIALS=dev-service-account.json --runtime python312 --trigger-http --allow-unauthenticated --gen2
+```
