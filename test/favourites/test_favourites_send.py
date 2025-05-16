@@ -1,7 +1,6 @@
-from unittest.mock import Mock
-
 from storage import favourites_adapter
 from storage.unable_to_send_exception import UnableToSendException
+from unittest.mock import Mock
 from validation.request_validation_favourites import RequestValidationFavourites
 
 

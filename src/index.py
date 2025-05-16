@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, request
 
 from endpoint.favourites import favourites_send, favourites_receive
