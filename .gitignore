@@ -1,9 +1,10 @@
+/bin/envvars.sh
+/bin/tidy-up-github-actions.sh
 config/*.json
 .coverage
 coverage.xml
 local.properties
-*/**/*.pyc
 */**/misc.xml
-/venv/
+*/**/*.pyc
 /system_test_dev.sh
-/bin/tidy-up-github-actions.sh
+/venv/

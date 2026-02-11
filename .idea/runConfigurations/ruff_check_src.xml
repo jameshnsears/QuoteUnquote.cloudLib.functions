@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="pylama src" type="PythonConfigurationType" factoryName="Python" folderName="Static Analysis">
+  <configuration default="false" name="ruff check src" type="PythonConfigurationType" factoryName="Python" folderName="Static Analysis">
     <module name="QuoteUnquote.cloudLib.functions" />
+    <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
@@ -12,8 +13,9 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="pylama" />
-    <option name="PARAMETERS" value="" />
+    <option name="RUN_TOOL" value="" />
+    <option name="SCRIPT_NAME" value="ruff" />
+    <option name="PARAMETERS" value="check ." />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="true" />
